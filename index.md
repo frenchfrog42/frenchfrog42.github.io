@@ -53,7 +53,9 @@ Edit the file `test.rkt` and play with it! Execute `racket test.rkt` to compile.
 
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frenchfrog42/Embed?embed=true"></iframe>
 
-[Link to another page](./another-page.html).
+# New to Baguette ?
+
+[Here is my documentation](http://replit-docs.frenchfrog42.repl.co).
 
 There should be whitespace between paragraphs.
 
