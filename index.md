@@ -41,13 +41,37 @@ So because you need to collect memory, the code I wrote above is wrong, the corr
 
 Also you can freely write assembly and modify the stack when you write code. However it's not all user-friendly. But I offer free support. Feel free to give it a quick try.
 
+# It can really get insanely efficient
+
+So our goal is to check if two vars are equal. The code is something like
+
+```C
+(define (is-equal a b)
+  `(= (destroy a) (destroy b)))
+```
+
+Funny enough you can write something like this:
+
+```C
+(define (is-equal f s)
+  (if (and (number? f) (number? s))
+    (if (= f s) "OP_TRUE" "OP_FALSE")
+    `(= (destroy ,f) (destroy ,s))))
+```
+
+So when called with only numbers, it'll compile to the result.  
+`(is-equal var1 var2)` will move both variable to the top of the stack, and call `OP_EQUAL`.  
+`(is-equal int1 int2)` compute the result during the compilation, and only push either `OP_TRUE` or `"OP_FALSE`.
+
+You can also specialize if only one of the arguments is known. If you check if you are equal to `OP_0`, you are iif you are `OP_0`, so just call `OP_NOT`.
+
 # Profiling
 
 Not sure what is expensive in your program ? Profile it.
 
 ```C
 (profile-function
-  `(public (a b)
+  '(public (a b)
       (define c (call checksigverify (a b))
       (define d (call buildOutput (a b))))
 ```
@@ -125,7 +149,7 @@ Here is the counter contract with it:
 
 And of course instead of `(compteur)`, you can use whatever list, each element will be a state variable. [Yes it works too](https://replit.com/@frenchfrog42/Counter).
 
-This is just an example, using `(destroy var)` everywhere when you don't care about size is boring too, so I wrote a lib too. Transforming source code in Lisp is very easy, so is eleminating boilerplate code. Here is an example of use:
+This is just an example, using `(destroy var)` everywhere when you don't care about size is boring too, so I wrote a lib too. Transforming source code in Lisp is very easy, so is eliminating boilerplate code. Here is an example of use:
 
 ```C
 (garbage-collector
@@ -140,6 +164,8 @@ Which produces
 ```
 
 Which then compiles to `OP_OVER OP_OVER OP_EQUAL OP_TOALTSTACK OP_NIP OP_DROP OP_FROMALTSTACK`. Not very efficient I know. At least it works :/
+
+You got the idea, if you have a repetitive pattern in your code, it's very easy to get rid of it.
 
 # Try Baguette here
 
