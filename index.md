@@ -30,7 +30,15 @@ Actually even my CI checks the code produced on simple examples is minimal, but 
 You need to collect memory manually. Tired of useless `OP_DROPs` and `OP_NIPs` ? Me too. So use `(destroy var)`.  
 For instance, if `var` is at the top of the stack, `(+ 1 (destroy a))` will produce `OP_1ADD`.
 
-Also you can freely write assembly and modify the stack when you write code.
+So I lied, you need to collect memory in the code I wrote, so the correct version is:  
+(which just compiles to `OP_EQUAL`, remember it tries to be efficient)
+
+```lisp
+'(public (a b)
+    (= (destroy a) (destroy b)))
+```
+
+Also you can freely write assembly and modify the stack when you write code. However it's not all user-friendly. But I offer free support. Feel free to give it a quick try.
 
 # Profiling
 
@@ -97,6 +105,8 @@ Which outputs
   14  opcodes ==============>                                      (call hashOutputs ((destroy tx-arg)))
     0   opcodes ============>                                                         (destroy tx-arg)
 ```
+
+Hard to guess which part is the most expensive without this profiling.
 
 # Try Baguette here
 
