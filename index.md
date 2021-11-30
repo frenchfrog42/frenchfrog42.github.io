@@ -10,7 +10,7 @@ Build your contract the same way, with public functions and everything you alrea
 
 Two equivalent contracts:
 
-```C
+```
 contract Test {
   public function(int a, int b) {
     require(a == b);
@@ -18,7 +18,7 @@ contract Test {
 }
 ```
 
-```
+```C
 '(public (a b)
     (= a b))
 ```
