@@ -8,6 +8,8 @@ Baguette is a Lisp->Script compiler. It tries to generate efficient code, and av
 
 Build your contract the same way, with public functions and everything you already know about.
 
+Two equivalent contracts:
+
 ```C
 contract Test {
   public function(int a, int b) {
@@ -98,7 +100,7 @@ Which outputs
 
 # Try Baguette here
 
-Edit the file `test.rkt` and play with it! Execute `racket test.rkt` to compile.
+Edit the file `test.rkt` and play with it! Execute `racket test.rkt` to compile. Or press the green arrow. If it's laggy it's replit fault, not mine, in your IDE it won't be I promise.
 
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frenchfrog42/Embed?embed=true"></iframe>
 
