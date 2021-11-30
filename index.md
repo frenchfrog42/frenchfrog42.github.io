@@ -47,7 +47,7 @@ So our goal is to check if two vars are equal. The code is something like
 
 ```C
 (define (is-equal a b)
-  `(= (destroy a) (destroy b)))
+  `(= (destroy ,a) (destroy ,b)))
 ```
 
 Funny enough you can write something like this:
