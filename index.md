@@ -18,7 +18,7 @@ contract Test {
 }
 ```
 
-```common-lisp
+```
 '(public (a b)
     (= a b))
 ```
@@ -129,10 +129,16 @@ This is just an example, using `(destroy var)` everywhere when you don't care ab
 ```
 (garbage-collector
   '(public (a b) (= a b))
-#f))
+#f)
 ```
 
-But it produces `OP_OVER OP_OVER OP_EQUAL OP_TOALTSTACK OP_NIP OP_DROP OP_FROMALTSTACK`. At least it works :/
+Which produces
+
+```
+'(public (a b) (= a b) "OP_TOALTSTACK" (cons (drop a) (drop b)) "OP_FROMALTSTACK")
+```
+
+Which then compiles to `OP_OVER OP_OVER OP_EQUAL OP_TOALTSTACK OP_NIP OP_DROP OP_FROMALTSTACK`. Not very efficient I know. At least it works :/
 
 # Try Baguette here
 
