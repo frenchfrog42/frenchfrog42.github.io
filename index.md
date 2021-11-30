@@ -5,13 +5,53 @@ title: test
 
 Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid boilerplate, at all cost.
 
-# Presentation
+# Similar to sCrypt
 
-o
+Build your contract the same way, with public functions and everything you already know about.
+
+```C
+contract Test {
+  public function(int a, int b) {
+    require(a == b);
+  }
+}
+```
+
+```lisp
+'(public (a b)
+    (= a b))
+```
+
+# Produced code is efficient
+
+My CI checks the code produced on simple examples is minimal, but here is some examples.
+
+# Profiling
+
+Not sure what is expensive in your program ? Profile it.
+
+```lisp
+(profile-function
+  `(public (a b)
+      (define c (call checksigverify (a b))
+      (define d (call buildOutput (a b))))
+```
+
+Here is the result
+
+```
+> racket test.rkt
+4   opcodes ================> (define c (call checksigverify (a b)))
+  4   opcodes ==============>           (call checksigverify (a b))
+82  opcodes ================> (define d (call buildOutput (a b)))
+  82  opcodes ==============>           (call buildOutput (a b))
+```
 
 # Try Baguette here
-<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frenchfrog42/Baguette?embed=true"></iframe>
-Text can be **bold**, _italic_, ~~strikethrough~~ or `keyword`.
+
+Edit the file `test.rkt` and play with it! Execute `racket test.rkt` to compile.
+
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frenchfrog42/Embed?embed=true"></iframe>
 
 [Link to another page](./another-page.html).
 
