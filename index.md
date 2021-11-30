@@ -1,7 +1,16 @@
 ---
 layout: default
+title: test
 ---
 
+Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid boilerplate, at all cost.
+
+# Presentation
+
+o
+
+# Try Baguette here
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frenchfrog42/Baguette?embed=true"></iframe>
 Text can be **bold**, _italic_, ~~strikethrough~~ or `keyword`.
 
 [Link to another page](./another-page.html).
