@@ -2,7 +2,7 @@
 layout: default
 ---
 
-Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid "boilerplate code", at all cost. No types. No user-friendly error messages.
+Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid "boilerplate code", at all cost. No types. No user-friendly error messages. Also not finished yet, so don't deploy to mainet.
 
 # Similar to sCrypt
 
@@ -61,7 +61,7 @@ Funny enough you can write something like this:
 
 So when called with only numbers, it'll compile to the result.  
 `(is-equal var1 var2)` will move both variable to the top of the stack, and call `OP_EQUAL`.  
-`(is-equal int1 int2)` compute the result during the compilation, and only push either `OP_TRUE` or `"OP_FALSE`.
+`(is-equal int1 int2)` compute the result during the compilation, and only push either `OP_TRUE` or `OP_FALSE`.
 
 You can also specialize if only one of the arguments is known. If you check if you are equal to `OP_0`, you are iif you are `OP_0`, so just call `OP_NOT`.
 
