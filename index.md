@@ -3,7 +3,7 @@ layout: default
 title: test
 ---
 
-Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid boilerplate, at all cost.
+Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid "boilerplate code", at all cost.
 
 # Similar to sCrypt
 
