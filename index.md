@@ -18,7 +18,7 @@ contract Test {
 }
 ```
 
-```lisp
+```common-lisp
 '(public (a b)
     (= a b))
 ```
@@ -66,7 +66,7 @@ No surprise here, checksigverify is an opcode but buildOutput isn't. But here is
 ```lisp
 (profile-function
   '(public (tx-arg amount-arg)
-    (call pushtx-assembly (tx-arg))
+    (call pushtx (tx-arg))
     (define scriptCode (call getScriptCode (tx-arg)))
     (define counter (call bin2num ((bytes-get-last scriptCode 1))))
     (define scriptCode_ (+bytes (bytes-delete-last (destroy scriptCode) 1) (+ 1 (destroy counter))))
@@ -80,7 +80,7 @@ Which outputs
 
 ```
 > racket test.rkt
-78  opcodes ================> (call pushtx-assembly (tx-arg))
+78  opcodes ================> (call pushtx (tx-arg))
 90  opcodes ================> (define scriptCode (call getScriptCode (tx-arg)))
   90  opcodes ==============>                    (call getScriptCode (tx-arg))
 9   opcodes ================> (define counter (call bin2num ((bytes-get-last scriptCode 1))))
@@ -107,6 +107,32 @@ Which outputs
 ```
 
 Hard to guess which part is the most expensive without this profiling.
+
+(Yes the counter contract works, push_tx too, I check myself [with this](https://replit.com/@frenchfrog42/Counter) when I push code, so you can check too).
+
+# No boilerplate code
+
+Keeping state is boring. So I wrote a library for this. Not 100% perfect, but works for now.
+
+Here is the counter contract with it:
+
+```
+(define compteur-state (vyper-create-final
+      '(compteur)
+      '((public () (modify compteur (+ 1 compteur))))))
+```
+
+And of course instead of `(compteur)`, you can use whatever list, each element will be a state variable. [Yes it works too](https://replit.com/@frenchfrog42/Counter).
+
+This is just an example, using `(destroy var)` everywhere when you don't care about size is boring too, so I wrote a lib too. Transforming source code in Lisp is very easy, so is eleminating boilerplate code. Here is an example of use:
+
+```
+(garbage-collector
+  '(public (a b) (= a b))
+#f))
+```
+
+But it produces `OP_OVER OP_OVER OP_EQUAL OP_TOALTSTACK OP_NIP OP_DROP OP_FROMALTSTACK`. At least it works :/
 
 # Try Baguette here
 
