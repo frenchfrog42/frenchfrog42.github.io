@@ -1,6 +1,5 @@
 ---
 layout: default
-title: test
 ---
 
 Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid "boilerplate code", at all cost.
@@ -24,7 +23,12 @@ contract Test {
 
 # Produced code is efficient
 
-My CI checks the code produced on simple examples is minimal, but here is some examples.
+Actually even my CI checks the code produced on simple examples is minimal, but here is some examples.
+
+You need to collect memory manually. Tired of useless `OP_DROPs` and `OP_NIPs` ? Me too. So use `(destroy var)`.  
+For instance, if `var` is at the top of the stack, `(+ 1 (destroy a))` will produce `OP_1ADD`.
+
+Also you can freely write assembly and modify the stack when you write code.
 
 # Profiling
 
@@ -47,6 +51,51 @@ Here is the result
   82  opcodes ==============>           (call buildOutput (a b))
 ```
 
+No surprise here, checksigverify is an opcode but buildOutput isn't. But here is a more interesting example.
+
+```lisp
+(profile-function
+  '(public (tx-arg amount-arg)
+    (call pushtx-assembly (tx-arg))
+    (define scriptCode (call getScriptCode (tx-arg)))
+    (define counter (call bin2num ((bytes-get-last scriptCode 1))))
+    (define scriptCode_ (+bytes (bytes-delete-last (destroy scriptCode) 1) (+ 1 (destroy counter))))
+    (define newAmount (call num2bin ((destroy amount-arg) 8)))
+    (define output (call buildOutput ((destroy scriptCode_) (destroy newAmount))))
+    (= (call hash256 ((destroy output))) (call hashOutputs ((destroy tx-arg))))
+))
+```
+
+Which outputs
+
+```
+> racket test.rkt
+78  opcodes ================> (call pushtx-assembly (tx-arg))
+90  opcodes ================> (define scriptCode (call getScriptCode (tx-arg)))
+  90  opcodes ==============>                    (call getScriptCode (tx-arg))
+9   opcodes ================> (define counter (call bin2num ((bytes-get-last scriptCode 1))))
+  9   opcodes ==============>                 (call bin2num ((bytes-get-last scriptCode 1)))
+    8   opcodes ============>                                (bytes-get-last scriptCode 1)
+11  opcodes ================> (define scriptCode_ (+bytes (bytes-delete-last (destroy scriptCode) 1) (+ 1 (destroy counter))))
+  11  opcodes ==============>                     (+bytes (bytes-delete-last (destroy scriptCode) 1) (+ 1 (destroy counter)))
+    8   opcodes ============>                             (bytes-delete-last (destroy scriptCode) 1)
+      1   opcodes ==========>                                                (destroy scriptCode)
+    1   opcodes ============>                                                                        (+ 1 (destroy counter))
+      0   opcodes ==========>                                                                             (destroy counter)
+3   opcodes ================> (define newAmount (call num2bin ((destroy amount-arg) 8)))
+  3   opcodes ==============>                   (call num2bin ((destroy amount-arg) 8))
+    1   opcodes ============>                                  (destroy amount-arg)
+79  opcodes ================> (define output (call buildOutput ((destroy scriptCode_) (destroy newAmount))))
+  79  opcodes ==============>                (call buildOutput ((destroy scriptCode_) (destroy newAmount)))
+    1   opcodes ============>                                   (destroy scriptCode_)
+    0   opcodes ============>                                                         (destroy newAmount)
+17  opcodes ================> (= (call hash256 ((destroy output))) (call hashOutputs ((destroy tx-arg))))
+  1   opcodes ==============>    (call hash256 ((destroy output)))
+    0   opcodes ============>                   (destroy output)
+  14  opcodes ==============>                                      (call hashOutputs ((destroy tx-arg)))
+    0   opcodes ============>                                                         (destroy tx-arg)
+```
+
 # Try Baguette here
 
 Edit the file `test.rkt` and play with it! Execute `racket test.rkt` to compile.
@@ -56,119 +105,3 @@ Edit the file `test.rkt` and play with it! Execute `racket test.rkt` to compile.
 # New to Baguette ?
 
 [Here is my documentation](http://replit-docs.frenchfrog42.repl.co).
-
-There should be whitespace between paragraphs.
-
-There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project.
-
-# Header 1
-
-This is a normal paragraph following a header. GitHub is a code hosting platform for version control and collaboration. It lets you and others work together on projects from anywhere.
-
-## Header 2
-
-> This is a blockquote following a header.
->
-> When something is important enough, you do it even if the odds are not in your favor.
-
-### Header 3
-
-```js
-// Javascript code with syntax highlighting.
-var fun = function lang(l) {
-  dateformat.i18n = require('./lang/' + l)
-  return true;
-}
-```
-
-```ruby
-# Ruby code with syntax highlighting
-GitHubPages::Dependencies.gems.each do |gem, version|
-  s.add_dependency(gem, "= #{version}")
-end
-```
-
-#### Header 4
-
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-*   This is an unordered list following a header.
-
-##### Header 5
-
-1.  This is an ordered list following a header.
-2.  This is an ordered list following a header.
-3.  This is an ordered list following a header.
-
-###### Header 6
-
-| head1        | head two          | three |
-|:-------------|:------------------|:------|
-| ok           | good swedish fish | nice  |
-| out of stock | good and plenty   | nice  |
-| ok           | good `oreos`      | hmm   |
-| ok           | good `zoute` drop | yumm  |
-
-### There's a horizontal rule below this.
-
-* * *
-
-### Here is an unordered list:
-
-*   Item foo
-*   Item bar
-*   Item baz
-*   Item zip
-
-### And an ordered list:
-
-1.  Item one
-1.  Item two
-1.  Item three
-1.  Item four
-
-### And a nested list:
-
-- level 1 item
-  - level 2 item
-  - level 2 item
-    - level 3 item
-    - level 3 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-  - level 2 item
-  - level 2 item
-- level 1 item
-
-### Small image
-
-![Octocat](https://github.githubassets.com/images/icons/emoji/octocat.png)
-
-### Large image
-
-![Branching](https://guides.github.com/activities/hello-world/branching.png)
-
-
-### Definition lists can be used with HTML syntax.
-
-<dl>
-<dt>Name</dt>
-<dd>Godzilla</dd>
-<dt>Born</dt>
-<dd>1952</dd>
-<dt>Birthplace</dt>
-<dd>Japan</dd>
-<dt>Color</dt>
-<dd>Green</dd>
-</dl>
-
-```
-Long, single-line code blocks should not wrap. They should horizontally scroll if they are too long. This line should be long enough to demonstrate this.
-```
-
-```
-The final element.
-```
