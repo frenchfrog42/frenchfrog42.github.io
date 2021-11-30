@@ -10,7 +10,7 @@ Build your contract the same way, with public functions and everything you alrea
 
 Two equivalent contracts:
 
-```
+```C
 contract Test {
   public function(int a, int b) {
     require(a == b);
@@ -27,13 +27,14 @@ contract Test {
 
 Actually even my CI checks the code produced on simple examples is minimal, but here is some examples.
 
-You need to collect memory manually. Tired of useless `OP_DROPs` and `OP_NIPs` ? Me too. So use `(destroy var)`.  
+You need to collect memory manually. Tired of useless `OP_DROPs` and `OP_NIPs` ?  
+Me too. So use `(destroy var)`.  
 For instance, if `var` is at the top of the stack, `(+ 1 (destroy a))` will produce `OP_1ADD`.
 
-So I lied, you need to collect memory in the code I wrote, so the correct version is:  
+So because you need to collect memory, the code I wrote above is wrong, the correct version is:  
 (which just compiles to `OP_EQUAL`, remember it tries to be efficient)
 
-```lisp
+```C
 '(public (a b)
     (= (destroy a) (destroy b)))
 ```
@@ -44,7 +45,7 @@ Also you can freely write assembly and modify the stack when you write code. How
 
 Not sure what is expensive in your program ? Profile it.
 
-```lisp
+```C
 (profile-function
   `(public (a b)
       (define c (call checksigverify (a b))
@@ -63,7 +64,7 @@ Here is the result
 
 No surprise here, checksigverify is an opcode but buildOutput isn't. But here is a more interesting example.
 
-```lisp
+```C
 (profile-function
   '(public (tx-arg amount-arg)
     (call pushtx (tx-arg))
@@ -116,7 +117,7 @@ Keeping state is boring. So I wrote a library for this. Not 100% perfect, but wo
 
 Here is the counter contract with it:
 
-```
+```C
 (define compteur-state (vyper-create-final
       '(compteur)
       '((public () (modify compteur (+ 1 compteur))))))
@@ -126,7 +127,7 @@ And of course instead of `(compteur)`, you can use whatever list, each element w
 
 This is just an example, using `(destroy var)` everywhere when you don't care about size is boring too, so I wrote a lib too. Transforming source code in Lisp is very easy, so is eleminating boilerplate code. Here is an example of use:
 
-```
+```C
 (garbage-collector
   '(public (a b) (= a b))
 #f)
@@ -134,7 +135,7 @@ This is just an example, using `(destroy var)` everywhere when you don't care ab
 
 Which produces
 
-```
+```C
 '(public (a b) (= a b) "OP_TOALTSTACK" (cons (drop a) (drop b)) "OP_FROMALTSTACK")
 ```
 
