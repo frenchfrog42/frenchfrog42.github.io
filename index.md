@@ -2,7 +2,7 @@
 layout: default
 ---
 
-Baguette is a Lisp->Script compiler. It tries to generate efficient code, and avoid "boilerplate code", at all cost. No types. No user-friendly error messages. Also not finished yet, so don't deploy to mainet.
+Baguette is a Lisp->BitcoinScript compiler. It tries to generate efficient code, and avoid "boilerplate code", at all cost. No types. No user-friendly error messages. Also not finished yet, so don't deploy to mainet.
 
 # Similar to sCrypt
 
