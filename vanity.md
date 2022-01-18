@@ -3,7 +3,7 @@ layout: default
 ---
 
 Hi,
-Thanks you for considering using buying a vanity address.  
+Thanks you for considering buying a vanity address.  
 This is made by [@MSinkec](https://twitter.com/MSinkec) and [1BaguettegL3S21U2erSNDYSe7UMJL2Y8v](https://twitter.com/NikamotoS)
 
 Price indication for a random modern GPU:  
