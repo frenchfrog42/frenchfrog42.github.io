@@ -4,7 +4,7 @@ layout: default
 
 Hi,
 Thanks you for considering buying a vanity address.  
-This is made by [@MSinkec](https://twitter.com/MSinkec)(did 90% of the work) and [1BaguettegL3S21U2erSNDYSe7UMJL2Y8v](https://twitter.com/NikamotoS)(did almost nothing)
+This is made by [@MSinkec](https://twitter.com/MSinkec)(did 99+% of the work) and [1BaguettegL3S21U2erSNDYSe7UMJL2Y8v](https://twitter.com/NikamotoS)(did almost nothing)
 
 Price indication for a random modern GPU:  
 length<8: Time to solve = instant - Price = 1$  
