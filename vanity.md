@@ -18,7 +18,7 @@ Do not ever share your WIF, and keep it (if something goes wrong or if you want 
 Once you did everything, you get an "API response", which is a txid that you need to share with whoever wants to search for your vanity address!  
 For instance share it on twitter and ping [@MSinkec](https://twitter.com/MSinkec). One day we'll have a nice looking page with all existing offers.
 
-If you wish to execute the script yourself, please clone https://github.com/msinkec/scrypt-vanitysearch.  
-If you wish to search for vanity address, please clone https://github.com/msinkec/vanitygen, and let us know what GPU you have, the price, etc...
+If you wish to execute the script yourself, please clone [this](https://github.com/msinkec/scrypt-vanitysearch).  
+If you wish to search for vanity address, please clone [this](https://github.com/msinkec/vanitygen), and let us know what GPU you have, the price, etc...
 
 <iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@frenchfrog42/vanity-address?embed=true"></iframe>
